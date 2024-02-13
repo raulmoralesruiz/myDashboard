@@ -15,6 +15,11 @@ export interface User {
   avatar:     string;
 }
 
+export interface UserResponse {
+  data:    User;
+  support: Support;
+}
+
 export interface Support {
   url:  string;
   text: string;
