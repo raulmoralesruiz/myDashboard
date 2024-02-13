@@ -1,16 +1,17 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute } from '@angular/router';
 import { User } from '@interfaces/req-response';
 import { TitleComponent } from '@shared/title/title.component';
 import { switchMap } from 'rxjs';
 import { UsersService } from '../../../services/users.service';
+import { CommonModule } from '@angular/common';
 
 @Component({
   standalone: true,
-  imports: [TitleComponent],
+  imports: [CommonModule, TitleComponent],
   template: `
-    <app-title title="User" />
+    <app-title [title]="titleLabel()" />
 
     @if ( user() ) {
     <section>
@@ -38,6 +39,16 @@ export default class UserComponent {
       switchMap(({ id }) => this.usersService.getUserById(id))
     )
   );
+
+  public titleLabel = computed(() => {
+    if (this.user()) {
+      return `Información del usuario ${this.user()!.first_name} ${
+        this.user()!.last_name
+      }`;
+    }
+
+    return 'Información del usuario';
+  });
 
   // constructor () {
   //   this.route.params.subscribe( params => {
